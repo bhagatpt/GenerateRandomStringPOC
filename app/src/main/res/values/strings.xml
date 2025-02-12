@@ -6,4 +6,5 @@
     <string name="generated_string">Generated: %1$s</string>
     <string name="length_string">Length: %1$s</string>
     <string name="created_string">Created: %1$s</string>
+    <string name="filter_string">Filter Strings</string>
 </resources>

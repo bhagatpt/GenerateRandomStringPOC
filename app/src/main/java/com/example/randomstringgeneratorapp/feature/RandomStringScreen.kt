@@ -65,19 +65,34 @@ fun RandomStringScreen() {
             ) {
                 Text(text = stringResource(R.string.delete_all_title))
             }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(
+                onClick = { viewModel.filterFavouriteStrings() },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(text = stringResource(R.string.filter_string))
+            }
         }
 
         // Generated list
         LazyColumn {
             itemsIndexed(state.randomStrings) { index, stringData ->
-                StringItem(stringData, onDelete = { viewModel.deleteString(index) })
+                StringItem(stringData, onDelete = { viewModel.deleteString(index) }, viewModel, index, state)
             }
         }
     }
 }
 
 @Composable
-fun StringItem(data: RandomStringData, onDelete: (RandomStringData) -> Unit) {
+fun StringItem(
+    data: RandomStringData,
+    onDelete: (RandomStringData) -> Unit,
+    viewModel: RandomStringViewModel,
+    index: Int,
+    state: RandomStringScreenState
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -103,6 +118,13 @@ fun StringItem(data: RandomStringData, onDelete: (RandomStringData) -> Unit) {
                 modifier = Modifier
                     .size(24.dp) // Set size
                     .clickable { onDelete(data) }
+            )
+            Image(
+                painter = if(!data.isFavoriteString) painterResource(R.drawable.baseline_favorite_border_24) else painterResource(R.drawable.ic_favorite),
+                contentDescription = "favorite",
+                modifier = Modifier
+                    .size(24.dp) // Set size
+                    .clickable { viewModel.markStringAsFavorite(index = index, isFavorite = !state.isFavoriteString, data) }
             )
         }
     }

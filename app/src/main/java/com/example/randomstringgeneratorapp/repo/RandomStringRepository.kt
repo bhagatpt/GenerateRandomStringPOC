@@ -18,7 +18,7 @@ class RandomStringRepository @Inject constructor(private val context: Context) {
             val cursor = resolver.query(
                 URI,
                 arrayOf("data"),
-                "lenght = ?",
+                "length = ?",
                 arrayOf(maxLength.toString()),
                 null
             )

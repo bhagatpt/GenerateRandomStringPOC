@@ -15,8 +15,7 @@ import java.time.Instant
 import javax.inject.Inject
 
 @HiltViewModel
-class RandomStringViewModel @Inject constructor(application: Application)
-    :  ViewModel() {
+class RandomStringViewModel @Inject constructor(application: Application) : ViewModel() {
 
     private val repository = RandomStringRepository(application)
 
@@ -30,7 +29,8 @@ class RandomStringViewModel @Inject constructor(application: Application)
         viewModelScope.launch {
             val newString = repository.fetchRandomString(maxLength)
             newString?.let {
-                val updatedList = state.value.randomStrings + RandomStringData(value = it.value, length = it.length,
+                val updatedList = state.value.randomStrings + RandomStringData(
+                    value = it.value, length = it.length,
                     created = it.created
                 )
 
@@ -44,11 +44,12 @@ class RandomStringViewModel @Inject constructor(application: Application)
     //As content provider was not accessible so Generated rando strings manually
     fun generateRandomString(length: Int) {
         val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-         val randomString = (1..length)
+        val randomString = (1..length)
             .map { chars.random() }
             .joinToString("")
-        val updatedList = state.value.randomStrings + RandomStringData(value = randomString, length = length,
-           created = Instant.now().toString()
+        val updatedList = state.value.randomStrings + RandomStringData(
+            value = randomString, length = length,
+            created = Instant.now().toString()
         )
 
         // Update state with the new list
@@ -62,6 +63,10 @@ class RandomStringViewModel @Inject constructor(application: Application)
         _state.value = state.value.copy(randomStrings = emptyList())
     }
 
+    fun filterFavouriteStrings(){
+        _state.value = state.value.copy(randomStrings = state.value.randomStrings.filter { it.isFavoriteString }.toMutableList())
+    }
+
     // Delete specific item
     fun deleteString(index: Int) {
         val updatedList = state.value.randomStrings.toMutableList().apply {
@@ -69,6 +74,20 @@ class RandomStringViewModel @Inject constructor(application: Application)
         }
         _state.value = state.value.copy(randomStrings = updatedList)
     }
+
+    fun markStringAsFavorite(index: Int, isFavorite: Boolean, data: RandomStringData) {
+        val updatedList = state.value.randomStrings.toMutableList().apply {
+            this[index] = RandomStringData(
+                value = data.value,
+                length = data.length,
+                created = data.created,
+                isFavoriteString = isFavorite
+            )
+        }
+
+        _state.value = state.value.copy(randomStrings = updatedList)
+    }
+
 }
 
 data class RandomStringScreenState(

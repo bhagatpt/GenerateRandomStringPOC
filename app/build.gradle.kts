@@ -20,7 +20,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.hilt.gradle)
-    alias(libs.plugins.ksp)
+  //  alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.parcelize)
 }
 
@@ -41,9 +41,7 @@ android {
         }
 
         // Enable room auto-migrations
-        ksp {
-            arg("room.schemaLocation", "$projectDir/schemas")
-        }
+
     }
 
 
