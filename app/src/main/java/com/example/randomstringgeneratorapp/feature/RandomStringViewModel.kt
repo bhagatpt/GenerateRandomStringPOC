@@ -85,11 +85,12 @@ class RandomStringViewModel @Inject constructor(application: Application) : View
             )
         }
 
-        _state.value = state.value.copy(randomStrings = updatedList)
+        _state.value = state.value.copy(randomStrings = updatedList, isFavoriteString = isFavorite)
     }
 
 }
 
 data class RandomStringScreenState(
-    val randomStrings: List<RandomStringData> = mutableListOf()
+    val randomStrings: List<RandomStringData> = mutableListOf(),
+    val isFavoriteString: Boolean = false
 )
